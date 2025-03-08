@@ -1,0 +1,2 @@
+#CRiando bd postegres com imagem e net-working
+docker run --name parki-api -p 5432:5432 -e POSTGRES_PASSWORD=docker -e POSTGRES_USER=docker -e POSTGRES_DB=parki-api -d --network library-network postgres:16.3
