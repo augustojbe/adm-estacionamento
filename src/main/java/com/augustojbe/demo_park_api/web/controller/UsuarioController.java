@@ -7,6 +7,7 @@ import com.augustojbe.demo_park_api.web.dto.UsuarioCreateDto;
 import com.augustojbe.demo_park_api.web.dto.UsuarioResponseDto;
 import com.augustojbe.demo_park_api.web.dto.UsuarioSenhaDto;
 import com.augustojbe.demo_park_api.web.dto.mapper.UsuarioMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto creteDto) {
+    public ResponseEntity<UsuarioResponseDto> create(@Valid @RequestBody UsuarioCreateDto creteDto) {
         Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(creteDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
 
@@ -42,7 +43,7 @@ public class UsuarioController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updatePassword(@PathVariable("id") Long id, @RequestBody UsuarioSenhaDto dto) {
+    public ResponseEntity<Void> updatePassword(@PathVariable("id") Long id, @Valid @RequestBody UsuarioSenhaDto dto) {
         Usuario user = usuarioService.editarSenha(id,
                 dto.getSenhaAtual(),
                 dto.getNovaSenha(),

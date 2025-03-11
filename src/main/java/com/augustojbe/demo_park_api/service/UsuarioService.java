@@ -1,6 +1,8 @@
 package com.augustojbe.demo_park_api.service;
 
 import com.augustojbe.demo_park_api.entity.Usuario;
+import com.augustojbe.demo_park_api.exception.EntityNotFoundException;
+import com.augustojbe.demo_park_api.exception.UsernameUniqueViolatioinException;
 import com.augustojbe.demo_park_api.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +19,18 @@ public class UsuarioService {
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+        try {
+            return usuarioRepository.save(usuario);
+
+        } catch (org.springframework.dao.DataIntegrityViolationException ex){
+            throw new UsernameUniqueViolatioinException(String.format("Username %s já cadastrado", usuario.getUsername()));
+        }
     }
 
     @Transactional(readOnly = true)
     public Usuario buscarPorId(Long id) {
         return usuarioRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Usuario não encontrado")
+                () -> new EntityNotFoundException(String.format("Usuario Id=%s encontrado", id))
         );
     }
 
